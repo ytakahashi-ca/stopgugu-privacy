@@ -34,8 +34,14 @@ const CONFIG = {
 };
 
 const LABELS = {
-  inviteUrl:"招待リンク", startLabel:"開始ボタン名", endLabel:"終了ボタン名",
-  surveyLabel:"アンケートの項目名", contactMethod:"連絡方法"
+  ja: {
+    inviteUrl:"招待リンク", startLabel:"開始ボタン名", endLabel:"終了ボタン名",
+    surveyLabel:"アンケートの項目名", contactMethod:"連絡方法"
+  },
+  de: {
+    inviteUrl:"Einladungslink", startLabel:"Name der Start-Schaltfläche", endLabel:"Name der Beenden-Schaltfläche",
+    surveyLabel:"Name des Umfrage-Menüpunkts", contactMethod:"Kontaktmethode"
+  }
 };
 </script>
 
@@ -88,6 +94,25 @@ const LABELS = {
   .hero h1{font-size:clamp(30px,8vw,44px); line-height:1.32; letter-spacing:-.025em; font-weight:800; margin:0 0 16px}
   .hero h1 em{font-style:normal; color:#B7A4FF}
   .hero .lede{margin:0; color:#C9C5DE; font-size:16px; line-height:1.9}
+
+  .langswitch{
+    position:absolute; top:20px; right:22px; z-index:5;
+    display:flex; gap:2px; background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2); border-radius:999px; padding:3px;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+  .langswitch button{
+    appearance:none; border:none; background:transparent; color:#C9C5DE;
+    font-family:var(--sans); font-size:12.5px; font-weight:700; line-height:1;
+    padding:7px 12px; border-radius:999px; cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .langswitch button.active{background:#fff; color:var(--night)}
+  .langswitch button:not(.active):hover{color:#fff}
+  @media (max-width:400px){
+    .langswitch{top:16px; right:16px}
+    .langswitch button{padding:6px 9px; font-size:11.5px}
+  }
 
   .prep{background:var(--card); border-radius:16px; padding:24px 26px; margin:-26px 0 0; position:relative;
         border:1px solid var(--rule)}
@@ -188,6 +213,7 @@ const LABELS = {
     .hero{background:#fff; color:#000}
     .hero h1 em{color:#000}
     .hero .lede{color:#333}
+    .langswitch{display:none}
     .step{break-inside:avoid}
     #devbar{display:none}
     details{border:none}
@@ -198,14 +224,18 @@ const LABELS = {
 <body>
 
 <div id="devbar"><div class="wrap">
-  <h3>未記入の項目があります（テスターに渡す前に埋めてください）</h3>
+  <h3 data-i18n="devbar_title">未記入の項目があります（テスターに渡す前に埋めてください）</h3>
   <p id="devlist"></p>
 </div></div>
 
 <div class="hero"><div class="wrap">
+  <div class="langswitch" role="group" aria-label="Language / Sprache">
+    <button type="button" data-lang="ja">日本語</button>
+    <button type="button" data-lang="de">Deutsch</button>
+  </div>
   <img class="mark" src="images/app-icon.png" alt="">
-  <h1><span data-cfg="appName"></span><br><em>テストの進めかた</em></h1>
-  <p class="lede">はじめの準備は<span data-cfg="setupMinutes"></span>分ほど。<br>
+  <h1><span data-cfg="appName"></span><br><em data-i18n="hero_h1_sub">テストの進めかた</em></h1>
+  <p class="lede" data-i18n="hero_lede">はじめの準備は<span data-cfg="setupMinutes"></span>分ほど。<br>
   あとは毎晩、Apple Watch を着けて眠るだけです。<br>
   上から順に進めれば終わります。</p>
 </div></div>
@@ -213,12 +243,12 @@ const LABELS = {
 <div class="wrap">
 
 <div class="prep">
-  <h2>はじめる前に用意するもの</h2>
+  <h2 data-i18n="prep_title">はじめる前に用意するもの</h2>
   <ul>
-    <li><strong>iPhone</strong>（iOS <span data-cfg="iosMin"></span> 以上を推奨）</li>
-    <li><strong>Apple Watch</strong> — iPhone とペアリング済みのもの</li>
-    <li><strong>iPhone の充電ケーブル</strong> — 一晩マイクを動かすため、寝ている間は充電しながら使います</li>
-    <li><strong>Apple ID</strong> — App Store にログインしている状態</li>
+    <li data-i18n="prep_li1"><strong>iPhone</strong>（iOS <span data-cfg="iosMin"></span> 以上を推奨）</li>
+    <li data-i18n="prep_li2"><strong>Apple Watch</strong> — iPhone とペアリング済みのもの</li>
+    <li data-i18n="prep_li3"><strong>iPhone の充電ケーブル</strong> — 一晩マイクを動かすため、寝ている間は充電しながら使います</li>
+    <li data-i18n="prep_li4"><strong>Apple ID</strong> — App Store にログインしている状態</li>
   </ul>
 </div>
 
@@ -227,293 +257,531 @@ const LABELS = {
   <!-- 1 -->
   <section class="step">
     <div class="badge">1</div>
-    <h2>TestFlight を入れる</h2>
-    <span class="when">初回のみ・1分</span>
+    <h2 data-i18n="s1_h2">TestFlight を入れる</h2>
+    <span class="when" data-i18n="s1_when">初回のみ・1分</span>
 
-    <p><span data-cfg="appName"></span> はまだ一般公開前のアプリのため、Apple 公式の「TestFlight」というアプリを経由してインストールします。無料です。</p>
+    <p data-i18n="s1_p"><span data-cfg="appName"></span> はまだ一般公開前のアプリのため、Apple 公式の「TestFlight」というアプリを経由してインストールします。無料です。</p>
     <ol>
-      <li>App Store を開く</li>
-      <li>「TestFlight」を検索する</li>
-      <li><strong>入手</strong> をタップしてインストール</li>
+      <li data-i18n="s1_li1">App Store を開く</li>
+      <li data-i18n="s1_li2">「TestFlight」を検索する</li>
+      <li data-i18n="s1_li3"><strong>入手</strong> をタップしてインストール</li>
     </ol>
     <figure>
       <img src="images/01-testflight.jpg" alt="App Store の TestFlight のページ">
-      <figcaption>青いプロペラのアイコンが目印です。提供元が Apple になっているものを選んでください。</figcaption>
+      <figcaption data-i18n="s1_fig">青いプロペラのアイコンが目印です。提供元が Apple になっているものを選んでください。</figcaption>
     </figure>
   </section>
 
   <!-- 2 -->
   <section class="step">
     <div class="badge">2</div>
-    <h2>TestFlight を開いて、利用規約に同意する</h2>
-    <span class="when">初回のみ・1分</span>
+    <h2 data-i18n="s2_h2">TestFlight を開いて、利用規約に同意する</h2>
+    <span class="when" data-i18n="s2_when">初回のみ・1分</span>
 
-    <p>インストールが終わったら、いったん TestFlight を開いてください。最初に利用規約の同意画面が出ます。</p>
-    <p><strong>「テスト準備完了」</strong>と表示されれば、この手順は完了です。ここではまだ何もインストールされていません。次に進んでください。</p>
+    <p data-i18n="s2_p1">インストールが終わったら、いったん TestFlight を開いてください。最初に利用規約の同意画面が出ます。</p>
+    <p data-i18n="s2_p2"><strong>「テスト準備完了」</strong>と表示されれば、この手順は完了です。ここではまだ何もインストールされていません。次に進んでください。</p>
     <figure>
       <img src="images/02-ready.jpg" alt="TestFlight のテスト準備完了画面">
-      <figcaption>この画面が出ればOKです。「コードを使う」は押さなくて構いません。</figcaption>
+      <figcaption data-i18n="s2_fig">この画面が出ればOKです。「コードを使う」は押さなくて構いません。</figcaption>
     </figure>
     <div class="note">
-      <p><b>この画面が出ないとき</b>　利用規約の同意が済んでいない可能性があります。TestFlight をもう一度開いて、案内に従って進めてください。</p>
+      <p data-i18n="s2_note"><b>この画面が出ないとき</b>　利用規約の同意が済んでいない可能性があります。TestFlight をもう一度開いて、案内に従って進めてください。</p>
     </div>
   </section>
 
   <!-- 3 -->
   <section class="step">
     <div class="badge">3</div>
-    <h2>招待リンクから <span data-cfg="appName"></span> を入れる</h2>
-    <span class="when">初回のみ・2分</span>
+    <h2 data-i18n="s3_h2">招待リンクから <span data-cfg="appName"></span> を入れる</h2>
+    <span class="when" data-i18n="s3_when">初回のみ・2分</span>
 
-    <p>下のリンクを <strong>iPhone で</strong> 開いてください。TestFlight が自動で開き、<span data-cfg="appName"></span> のページが表示されます。</p>
+    <p data-i18n="s3_p1">下のリンクを <strong>iPhone で</strong> 開いてください。TestFlight が自動で開き、<span data-cfg="appName"></span> のページが表示されます。</p>
 
     <a class="linkbox" data-cfg-href="inviteUrl" href="#"><span data-cfg="inviteUrl"></span></a>
 
-    <p><strong>インストール</strong> をタップすると、ホーム画面に <span data-cfg="appName"></span> のアイコンが追加されます。</p>
+    <p data-i18n="s3_p2"><strong>インストール</strong> をタップすると、ホーム画面に <span data-cfg="appName"></span> のアイコンが追加されます。</p>
     <figure>
       <img src="images/03-install.jpg" alt="TestFlight 内のインストール画面">
     </figure>
     <div class="warn">
-      <p><b>パソコンで開いても進めません。</b>　リンクは必ず iPhone で開いてください。メールや LINE で自分宛てに送っておくと開きやすいです。</p>
+      <p data-i18n="s3_warn"><b>パソコンで開いても進めません。</b>　リンクは必ず iPhone で開いてください。メールや LINE で自分宛てに送っておくと開きやすいです。</p>
     </div>
   </section>
 
   <!-- 4 -->
   <section class="step">
     <div class="badge">4</div>
-    <h2>2つの許可をオンにする</h2>
-    <span class="when">初回のみ・2分</span>
+    <h2 data-i18n="s4_h2">2つの許可をオンにする</h2>
+    <span class="when" data-i18n="s4_when">初回のみ・2分</span>
 
-    <p>ホーム画面の <span data-cfg="appName"></span> を開き、まん中の大きな <strong><span data-cfg="startLabel"></span></strong> をタップしてください。「おやすみ前の準備」が始まり、その途中で2つの確認が出ます。<strong>どちらも「許可」を選んでください。</strong></p>
+    <p data-i18n="s4_p1">ホーム画面の <span data-cfg="appName"></span> を開き、まん中の大きな <strong><span data-cfg="startLabel"></span></strong> をタップしてください。「おやすみ前の準備」が始まり、その途中で2つの確認が出ます。<strong>どちらも「許可」を選んでください。</strong></p>
 
     <div class="pair">
       <figure>
         <img src="images/04-mic.jpg" alt="マイクの許可を求めるポップアップ">
-        <figcaption>マイクの使用。いびきの検知に使います。</figcaption>
+        <figcaption data-i18n="s4_fig1">マイクの使用。いびきの検知に使います。</figcaption>
       </figure>
       <figure>
         <img src="images/04-notification.jpg" alt="通知の許可を求めるポップアップ">
-        <figcaption>通知の送信。Apple Watch を振動させるために必要です。</figcaption>
+        <figcaption data-i18n="s4_fig2">通知の送信。Apple Watch を振動させるために必要です。</figcaption>
       </figure>
     </div>
 
     <div class="warn">
-      <p><b>ここが一番大事です。</b>　どちらか一方でも「許可しない」を選ぶと、いびきを検知できず、Apple Watch も振動しません。テストのあいだ、なにも記録されない状態になってしまいます。</p>
+      <p data-i18n="s4_warn"><b>ここが一番大事です。</b>　どちらか一方でも「許可しない」を選ぶと、いびきを検知できず、Apple Watch も振動しません。テストのあいだ、なにも記録されない状態になってしまいます。</p>
     </div>
 
-    <p>録音した音声は iPhone の中だけで処理され、外部に送信されることはありません。</p>
-    <p>誤って「許可しない」を押してしまった場合は、iPhone の <strong>設定 → <span data-cfg="appName"></span></strong> から、マイクと通知をオンに戻せます。</p>
+    <p data-i18n="s4_p2">録音した音声は iPhone の中だけで処理され、外部に送信されることはありません。</p>
+    <p data-i18n="s4_p3">誤って「許可しない」を押してしまった場合は、iPhone の <strong>設定 → <span data-cfg="appName"></span></strong> から、マイクと通知をオンに戻せます。</p>
   </section>
 
   <!-- 5 -->
   <section class="step">
     <div class="badge">5</div>
-    <h2>Apple Watch が振動するか確かめる</h2>
-    <span class="when">初回のみ・2分</span>
+    <h2 data-i18n="s5_h2">Apple Watch が振動するか確かめる</h2>
+    <span class="when" data-i18n="s5_when">初回のみ・2分</span>
 
-    <p>はじめての夜を迎える前に、実際に手首が振動するかを一度だけ確認しておきます。ここで振動しないまま眠ってしまうと、その晩のデータが取れません。</p>
+    <p data-i18n="s5_p1">はじめての夜を迎える前に、実際に手首が振動するかを一度だけ確認しておきます。ここで振動しないまま眠ってしまうと、その晩のデータが取れません。</p>
     <ol>
-      <li>Apple Watch を手首に着ける</li>
-      <li>ホーム画面の<strong>左下にある Apple Watch のアイコン</strong>をタップする</li>
-      <li>開いた画面の案内にしたがって、テストの振動を送る</li>
+      <li data-i18n="s5_li1">Apple Watch を手首に着ける</li>
+      <li data-i18n="s5_li2">ホーム画面の<strong>左下にある Apple Watch のアイコン</strong>をタップする</li>
+      <li data-i18n="s5_li3">開いた画面の案内にしたがって、テストの振動を送る</li>
     </ol>
 
     <figure>
       <img src="images/05-watch-icon.jpg" alt="ホーム画面の左下にある Apple Watch のアイコン">
-      <figcaption>矢印の先にあるアイコンです。ここから接続の確認と振動のテストができます。</figcaption>
+      <figcaption data-i18n="s5_fig">矢印の先にあるアイコンです。ここから接続の確認と振動のテストができます。</figcaption>
     </figure>
 
     <div class="ok">
-      <p><b>振動を感じられたら準備完了です。</b>　今夜から始められます。</p>
+      <p data-i18n="s5_ok"><b>振動を感じられたら準備完了です。</b>　今夜から始められます。</p>
     </div>
-    <p>振動しない場合は、このページの下にある「うまくいかないとき」をご覧ください。</p>
+    <p data-i18n="s5_p2">振動しない場合は、このページの下にある「うまくいかないとき」をご覧ください。</p>
   </section>
 
   <!-- 6 -->
   <section class="step">
     <div class="badge">6</div>
-    <h2>寝る前にすること</h2>
-    <span class="when">毎晩・1分</span>
+    <h2 data-i18n="s6_h2">寝る前にすること</h2>
+    <span class="when" data-i18n="s6_when">毎晩・1分</span>
 
     <ol>
-      <li><strong>iPhone を枕元に置く。</strong>充電ケーブルを挿しておいてください</li>
-      <li>Apple Watch を手首に着ける（充電は寝る前までに済ませておいてください）</li>
-      <li><span data-cfg="appName"></span> を開いて <strong><span data-cfg="startLabel"></span></strong> をタップする</li>
-      <li>画面の案内にしたがって進む</li>
-      <li>最後に <strong>iPhone のサイドボタンを押して、画面をオフにする</strong></li>
+      <li data-i18n="s6_li1"><strong>iPhone を枕元に置く。</strong>充電ケーブルを挿しておいてください</li>
+      <li data-i18n="s6_li2">Apple Watch を手首に着ける（充電は寝る前までに済ませておいてください）</li>
+      <li data-i18n="s6_li3"><span data-cfg="appName"></span> を開いて <strong><span data-cfg="startLabel"></span></strong> をタップする</li>
+      <li data-i18n="s6_li4">画面の案内にしたがって進む</li>
+      <li data-i18n="s6_li5">最後に <strong>iPhone のサイドボタンを押して、画面をオフにする</strong></li>
     </ol>
 
     <figure>
       <img src="images/06-started.jpg" alt="見守り開始後の画面">
-      <figcaption>この画面が出たら、サイドボタンを押して画面を消してください。</figcaption>
+      <figcaption data-i18n="s6_fig">この画面が出たら、サイドボタンを押して画面を消してください。</figcaption>
     </figure>
 
     <div class="warn">
-      <p><b>画面をつけたままにしないでください。</b>　画面がついていると Apple Watch が振動しません。最後に必ずサイドボタンを押して、画面をオフにしてから眠ってください。</p>
+      <p data-i18n="s6_warn"><b>画面をつけたままにしないでください。</b>　画面がついていると Apple Watch が振動しません。最後に必ずサイドボタンを押して、画面をオフにしてから眠ってください。</p>
     </div>
 
     <div class="note">
-      <p><b>アプリを閉じても大丈夫です。</b>　画面を消しても記録は続きます。開いたままにしておく必要はありません。</p>
+      <p data-i18n="s6_note"><b>アプリを閉じても大丈夫です。</b>　画面を消しても記録は続きます。開いたままにしておく必要はありません。</p>
     </div>
   </section>
 
   <!-- 7 -->
   <section class="step">
     <div class="badge">7</div>
-    <h2>朝、起きたら</h2>
-    <span class="when">毎朝・10秒</span>
+    <h2 data-i18n="s7_h2">朝、起きたら</h2>
+    <span class="when" data-i18n="s7_when">毎朝・10秒</span>
 
-    <p>目が覚めたら <span data-cfg="appName"></span> を開いて、<strong><span data-cfg="endLabel"></span></strong> をタップしてください。</p>
-    <p>そのあと質問が1問だけ表示されます。タップで選ぶだけなので、すぐ終わります。</p>
-    <p>正直に答えていただくことが、そのまま結果になります。「振動で起きてしまった」も大切なデータですので、遠慮なくお選びください。</p>
-    <p>答え忘れた日があっても、テストは続けられます。気づいた時点で次の日から再開してください。</p>
+    <p data-i18n="s7_p1">目が覚めたら <span data-cfg="appName"></span> を開いて、<strong><span data-cfg="endLabel"></span></strong> をタップしてください。</p>
+    <p data-i18n="s7_p2">そのあと質問が1問だけ表示されます。タップで選ぶだけなので、すぐ終わります。</p>
+    <p data-i18n="s7_p3">正直に答えていただくことが、そのまま結果になります。「振動で起きてしまった」も大切なデータですので、遠慮なくお選びください。</p>
+    <p data-i18n="s7_p4">答え忘れた日があっても、テストは続けられます。気づいた時点で次の日から再開してください。</p>
   </section>
 
   <!-- 8 -->
   <section class="step">
     <div class="badge">8</div>
-    <h2>すべての晩が終わったら、回答を送る</h2>
-    <span class="when">最後に1回・5分</span>
+    <h2 data-i18n="s8_h2">すべての晩が終わったら、回答を送る</h2>
+    <span class="when" data-i18n="s8_when">最後に1回・5分</span>
 
-    <p>募集要項で決められた晩数が終わったら、アンケートに答えて送信してください。これで完了です。</p>
+    <p data-i18n="s8_p">募集要項で決められた晩数が終わったら、アンケートに答えて送信してください。これで完了です。</p>
 
     <ol>
-      <li>ホーム画面の<strong>右下にある歯車のアイコン</strong>をタップする</li>
-      <li><strong><span data-cfg="surveyLabel"></span></strong> に進む</li>
-      <li>アンケートに回答する</li>
-      <li>回答を終えるとメールアプリが立ち上がります。宛先と添付ファイルはすでに入っているので、<strong>右上の送信ボタンを押すだけ</strong>です</li>
+      <li data-i18n="s8_li1">ホーム画面の<strong>右下にある歯車のアイコン</strong>をタップする</li>
+      <li data-i18n="s8_li2"><strong><span data-cfg="surveyLabel"></span></strong> に進む</li>
+      <li data-i18n="s8_li3">アンケートに回答する</li>
+      <li data-i18n="s8_li4">回答を終えるとメールアプリが立ち上がります。宛先と添付ファイルはすでに入っているので、<strong>右上の送信ボタンを押すだけ</strong>です</li>
     </ol>
 
     <div class="pair">
       <figure>
         <img src="images/08-settings.jpg" alt="ホーム画面の右下にある歯車のアイコン">
-        <figcaption>矢印の先が設定のアイコンです。</figcaption>
+        <figcaption data-i18n="s8_fig1">矢印の先が設定のアイコンです。</figcaption>
       </figure>
       <figure>
         <img src="images/08-mail.jpg" alt="送信直前のメール作成画面">
-        <figcaption>この画面になったら、右上の青い矢印で送信してください。</figcaption>
+        <figcaption data-i18n="s8_fig2">この画面になったら、右上の青い矢印で送信してください。</figcaption>
       </figure>
     </div>
 
     <div class="done">
       <img src="images/app-icon.png" alt="">
-      <h3>お疲れさまでした</h3>
-      <p>これで作業は完了です。ご協力ありがとうございました。</p>
+      <h3 data-i18n="s8_done_h3">お疲れさまでした</h3>
+      <p data-i18n="s8_done_p">これで作業は完了です。ご協力ありがとうございました。</p>
     </div>
   </section>
 
   <!-- info -->
   <section class="step">
     <div class="badge info">?</div>
-    <h2>送っていただくデータについて</h2>
-    <span class="when">お読みください</span>
+    <h2 data-i18n="info_h2">送っていただくデータについて</h2>
+    <span class="when" data-i18n="info_when">お読みください</span>
 
-    <p>送信されるのは次の2つだけです。</p>
+    <p data-i18n="info_p1">送信されるのは次の2つだけです。</p>
     <ul>
-      <li>いびきの検知記録（時刻と数値のデータ）</li>
-      <li>アンケートの回答</li>
+      <li data-i18n="info_li1">いびきの検知記録（時刻と数値のデータ）</li>
+      <li data-i18n="info_li2">アンケートの回答</li>
     </ul>
-    <p><strong>録音した音声そのものは送信されません。</strong>音声は iPhone の中だけで処理され、判定が終わったら消えます。お名前や連絡先などの個人情報も含まれません。</p>
-    <p>アンケートの自由記述は、匿名でアプリの紹介文や記事に引用させていただく場合があります。引用を希望されない場合は、その旨をアンケートにご記入ください。</p>
+    <p data-i18n="info_p2"><strong>録音した音声そのものは送信されません。</strong>音声は iPhone の中だけで処理され、判定が終わったら消えます。お名前や連絡先などの個人情報も含まれません。</p>
+    <p data-i18n="info_p3">アンケートの自由記述は、匿名でアプリの紹介文や記事に引用させていただく場合があります。引用を希望されない場合は、その旨をアンケートにご記入ください。</p>
   </section>
 
 </div>
 
 <!-- FAQ -->
 <section class="faq">
-  <h2>うまくいかないとき</h2>
-  <p class="sub">当てはまるものをタップすると開きます。</p>
+  <h2 data-i18n="faq_h2">うまくいかないとき</h2>
+  <p class="sub" data-i18n="faq_sub">当てはまるものをタップすると開きます。</p>
 
   <details>
-    <summary>Apple Watch が振動しない</summary>
+    <summary data-i18n="faq1_summary">Apple Watch が振動しない</summary>
     <div class="inner">
-      <p>まず、<strong>iPhone の画面がオフになっているか</strong>を確認してください。画面がついていると振動しません。</p>
-      <p>それでも振動しない場合は、次の順に確認してください。</p>
-      <p>1. iPhone の <strong>設定 → 通知 → <span data-cfg="appName"></span></strong> で通知が許可されているか<br>
+      <p data-i18n="faq1_p1">まず、<strong>iPhone の画面がオフになっているか</strong>を確認してください。画面がついていると振動しません。</p>
+      <p data-i18n="faq1_p2">それでも振動しない場合は、次の順に確認してください。</p>
+      <p data-i18n="faq1_list">1. iPhone の <strong>設定 → 通知 → <span data-cfg="appName"></span></strong> で通知が許可されているか<br>
       2. iPhone の <strong>Watch アプリ → 通知</strong> で <span data-cfg="appName"></span> がオフになっていないか<br>
       3. Apple Watch が<strong>シアターモード</strong>や<strong>おやすみモード</strong>になっていないか<br>
       4. Apple Watch の <strong>設定 → サウンドと触覚</strong> で触覚の強さが最小になっていないか<br>
       5. Apple Watch のバッテリーが切れていないか</p>
-      <p>それでも振動しない場合は、お手数ですがご連絡ください。</p>
+      <p data-i18n="faq1_p3">それでも振動しない場合は、お手数ですがご連絡ください。</p>
     </div>
   </details>
 
   <details>
-    <summary>朝になったら記録が途中で止まっていた</summary>
+    <summary data-i18n="faq2_summary">朝になったら記録が途中で止まっていた</summary>
     <div class="inner">
-      <p>そのままで構いません。どこで止まったかも、こちらにとっては重要な情報です。翌晩はいつも通り進めてください。</p>
-      <p>毎晩同じように止まる場合は、ご連絡いただけると助かります。</p>
+      <p data-i18n="faq2_p1">そのままで構いません。どこで止まったかも、こちらにとっては重要な情報です。翌晩はいつも通り進めてください。</p>
+      <p data-i18n="faq2_p2">毎晩同じように止まる場合は、ご連絡いただけると助かります。</p>
     </div>
   </details>
 
   <details>
-    <summary>いびきをかいていないのに振動した／かいていたのに振動しなかった</summary>
+    <summary data-i18n="faq3_summary">いびきをかいていないのに振動した／かいていたのに振動しなかった</summary>
     <div class="inner">
-      <p>検知の精度を確かめるのが、今回のテストの目的のひとつです。気づいた点はアンケートの自由記述にお書きください。うまくいかなかった例ほど参考になります。</p>
+      <p data-i18n="faq3_p">検知の精度を確かめるのが、今回のテストの目的のひとつです。気づいた点はアンケートの自由記述にお書きください。うまくいかなかった例ほど参考になります。</p>
     </div>
   </details>
 
   <details>
-    <summary>途中で1晩できない日があった</summary>
+    <summary data-i18n="faq4_summary">途中で1晩できない日があった</summary>
     <div class="inner">
-      <p>募集要項に書かれた期間内であれば、連続していなくて構いません。翌日以降に再開してください。</p>
+      <p data-i18n="faq4_p">募集要項に書かれた期間内であれば、連続していなくて構いません。翌日以降に再開してください。</p>
     </div>
   </details>
 
   <details>
-    <summary>朝、終了するのを忘れて日中もそのままだった</summary>
+    <summary data-i18n="faq5_summary">朝、終了するのを忘れて日中もそのままだった</summary>
     <div class="inner">
-      <p>気づいた時点で <strong><span data-cfg="endLabel"></span></strong> をタップしてください。その日の記録が長くなるだけで、翌晩には影響しません。</p>
+      <p data-i18n="faq5_p">気づいた時点で <strong><span data-cfg="endLabel"></span></strong> をタップしてください。その日の記録が長くなるだけで、翌晩には影響しません。</p>
     </div>
   </details>
 
   <details>
-    <summary>メールが送れない／添付ファイルが大きいと言われる</summary>
+    <summary data-i18n="faq6_summary">メールが送れない／添付ファイルが大きいと言われる</summary>
     <div class="inner">
-      <p>Wi-Fi に接続した状態でもう一度お試しください。それでも送れない場合は、送信せずにご連絡ください。別の方法をご案内します。</p>
+      <p data-i18n="faq6_p">Wi-Fi に接続した状態でもう一度お試しください。それでも送れない場合は、送信せずにご連絡ください。別の方法をご案内します。</p>
     </div>
   </details>
 
   <details>
-    <summary>アプリが見当たらない／消えてしまった</summary>
+    <summary data-i18n="faq7_summary">アプリが見当たらない／消えてしまった</summary>
     <div class="inner">
-      <p>TestFlight アプリを開くと、<span data-cfg="appName"></span> が一覧に残っています。そこから開き直せます。</p>
+      <p data-i18n="faq7_p">TestFlight アプリを開くと、<span data-cfg="appName"></span> が一覧に残っています。そこから開き直せます。</p>
     </div>
   </details>
 
   <details>
-    <summary>テストが終わった後、アプリはどうすればいい</summary>
+    <summary data-i18n="faq8_summary">テストが終わった後、アプリはどうすればいい</summary>
     <div class="inner">
-      <p>削除していただいて構いません。TestFlight も不要であれば削除できます。記録は端末の中にしかないため、削除すると消えます。</p>
+      <p data-i18n="faq8_p">削除していただいて構いません。TestFlight も不要であれば削除できます。記録は端末の中にしかないため、削除すると消えます。</p>
     </div>
   </details>
 </section>
 
 <div class="contact">
-  <h2>困ったときの連絡先</h2>
-  <p>手順の途中で分からなくなったら、遠慮なくご連絡ください。すぐに対応します。</p>
+  <h2 data-i18n="contact_h2">困ったときの連絡先</h2>
+  <p data-i18n="contact_p">手順の途中で分からなくなったら、遠慮なくご連絡ください。すぐに対応します。</p>
   <p><a class="mail" data-cfg-href-mail="contactMethod" href="#"><span data-cfg="contactMethod"></span></a></p>
 </div>
 
 <footer>
-  <span data-cfg="appName"></span> モニターテスト 手順書<br>
-  本アプリは医療機器ではありません。睡眠時無呼吸症候群の診断や治療を目的としたものではありません。
+  <span data-i18n="footer_line1"><span data-cfg="appName"></span> モニターテスト 手順書</span><br>
+  <span data-i18n="footer_line2">本アプリは医療機器ではありません。睡眠時無呼吸症候群の診断や治療を目的としたものではありません。</span>
 </footer>
 
 </div>
 
 <script>
-(function(){
+const I18N = {
+ja: {
+  devbar_title: "未記入の項目があります（テスターに渡す前に埋めてください）",
+  hero_h1_sub: "テストの進めかた",
+  hero_lede: 'はじめの準備は<span data-cfg="setupMinutes"></span>分ほど。<br>あとは毎晩、Apple Watch を着けて眠るだけです。<br>上から順に進めれば終わります。',
+  prep_title: "はじめる前に用意するもの",
+  prep_li1: '<strong>iPhone</strong>（iOS <span data-cfg="iosMin"></span> 以上を推奨）',
+  prep_li2: '<strong>Apple Watch</strong> — iPhone とペアリング済みのもの',
+  prep_li3: '<strong>iPhone の充電ケーブル</strong> — 一晩マイクを動かすため、寝ている間は充電しながら使います',
+  prep_li4: '<strong>Apple ID</strong> — App Store にログインしている状態',
+
+  s1_h2: "TestFlight を入れる",
+  s1_when: "初回のみ・1分",
+  s1_p: '<span data-cfg="appName"></span> はまだ一般公開前のアプリのため、Apple 公式の「TestFlight」というアプリを経由してインストールします。無料です。',
+  s1_li1: "App Store を開く",
+  s1_li2: "「TestFlight」を検索する",
+  s1_li3: "<strong>入手</strong> をタップしてインストール",
+  s1_fig: "青いプロペラのアイコンが目印です。提供元が Apple になっているものを選んでください。",
+
+  s2_h2: "TestFlight を開いて、利用規約に同意する",
+  s2_when: "初回のみ・1分",
+  s2_p1: "インストールが終わったら、いったん TestFlight を開いてください。最初に利用規約の同意画面が出ます。",
+  s2_p2: "<strong>「テスト準備完了」</strong>と表示されれば、この手順は完了です。ここではまだ何もインストールされていません。次に進んでください。",
+  s2_fig: "この画面が出ればOKです。「コードを使う」は押さなくて構いません。",
+  s2_note: "<b>この画面が出ないとき</b>　利用規約の同意が済んでいない可能性があります。TestFlight をもう一度開いて、案内に従って進めてください。",
+
+  s3_h2: '招待リンクから <span data-cfg="appName"></span> を入れる',
+  s3_when: "初回のみ・2分",
+  s3_p1: '下のリンクを <strong>iPhone で</strong> 開いてください。TestFlight が自動で開き、<span data-cfg="appName"></span> のページが表示されます。',
+  s3_p2: '<strong>インストール</strong> をタップすると、ホーム画面に <span data-cfg="appName"></span> のアイコンが追加されます。',
+  s3_warn: "<b>パソコンで開いても進めません。</b>　リンクは必ず iPhone で開いてください。メールや LINE で自分宛てに送っておくと開きやすいです。",
+
+  s4_h2: "2つの許可をオンにする",
+  s4_when: "初回のみ・2分",
+  s4_p1: 'ホーム画面の <span data-cfg="appName"></span> を開き、まん中の大きな <strong><span data-cfg="startLabel"></span></strong> をタップしてください。「おやすみ前の準備」が始まり、その途中で2つの確認が出ます。<strong>どちらも「許可」を選んでください。</strong>',
+  s4_fig1: "マイクの使用。いびきの検知に使います。",
+  s4_fig2: "通知の送信。Apple Watch を振動させるために必要です。",
+  s4_warn: "<b>ここが一番大事です。</b>　どちらか一方でも「許可しない」を選ぶと、いびきを検知できず、Apple Watch も振動しません。テストのあいだ、なにも記録されない状態になってしまいます。",
+  s4_p2: "録音した音声は iPhone の中だけで処理され、外部に送信されることはありません。",
+  s4_p3: '誤って「許可しない」を押してしまった場合は、iPhone の <strong>設定 → <span data-cfg="appName"></span></strong> から、マイクと通知をオンに戻せます。',
+
+  s5_h2: "Apple Watch が振動するか確かめる",
+  s5_when: "初回のみ・2分",
+  s5_p1: "はじめての夜を迎える前に、実際に手首が振動するかを一度だけ確認しておきます。ここで振動しないまま眠ってしまうと、その晩のデータが取れません。",
+  s5_li1: "Apple Watch を手首に着ける",
+  s5_li2: "ホーム画面の<strong>左下にある Apple Watch のアイコン</strong>をタップする",
+  s5_li3: "開いた画面の案内にしたがって、テストの振動を送る",
+  s5_fig: "矢印の先にあるアイコンです。ここから接続の確認と振動のテストができます。",
+  s5_ok: "<b>振動を感じられたら準備完了です。</b>　今夜から始められます。",
+  s5_p2: "振動しない場合は、このページの下にある「うまくいかないとき」をご覧ください。",
+
+  s6_h2: "寝る前にすること",
+  s6_when: "毎晩・1分",
+  s6_li1: "<strong>iPhone を枕元に置く。</strong>充電ケーブルを挿しておいてください",
+  s6_li2: "Apple Watch を手首に着ける（充電は寝る前までに済ませておいてください）",
+  s6_li3: '<span data-cfg="appName"></span> を開いて <strong><span data-cfg="startLabel"></span></strong> をタップする',
+  s6_li4: "画面の案内にしたがって進む",
+  s6_li5: "最後に <strong>iPhone のサイドボタンを押して、画面をオフにする</strong>",
+  s6_fig: "この画面が出たら、サイドボタンを押して画面を消してください。",
+  s6_warn: "<b>画面をつけたままにしないでください。</b>　画面がついていると Apple Watch が振動しません。最後に必ずサイドボタンを押して、画面をオフにしてから眠ってください。",
+  s6_note: "<b>アプリを閉じても大丈夫です。</b>　画面を消しても記録は続きます。開いたままにしておく必要はありません。",
+
+  s7_h2: "朝、起きたら",
+  s7_when: "毎朝・10秒",
+  s7_p1: '目が覚めたら <span data-cfg="appName"></span> を開いて、<strong><span data-cfg="endLabel"></span></strong> をタップしてください。',
+  s7_p2: "そのあと質問が1問だけ表示されます。タップで選ぶだけなので、すぐ終わります。",
+  s7_p3: "正直に答えていただくことが、そのまま結果になります。「振動で起きてしまった」も大切なデータですので、遠慮なくお選びください。",
+  s7_p4: "答え忘れた日があっても、テストは続けられます。気づいた時点で次の日から再開してください。",
+
+  s8_h2: "すべての晩が終わったら、回答を送る",
+  s8_when: "最後に1回・5分",
+  s8_p: "募集要項で決められた晩数が終わったら、アンケートに答えて送信してください。これで完了です。",
+  s8_li1: "ホーム画面の<strong>右下にある歯車のアイコン</strong>をタップする",
+  s8_li2: '<strong><span data-cfg="surveyLabel"></span></strong> に進む',
+  s8_li3: "アンケートに回答する",
+  s8_li4: "回答を終えるとメールアプリが立ち上がります。宛先と添付ファイルはすでに入っているので、<strong>右上の送信ボタンを押すだけ</strong>です",
+  s8_fig1: "矢印の先が設定のアイコンです。",
+  s8_fig2: "この画面になったら、右上の青い矢印で送信してください。",
+  s8_done_h3: "お疲れさまでした",
+  s8_done_p: "これで作業は完了です。ご協力ありがとうございました。",
+
+  info_h2: "送っていただくデータについて",
+  info_when: "お読みください",
+  info_p1: "送信されるのは次の2つだけです。",
+  info_li1: "いびきの検知記録（時刻と数値のデータ）",
+  info_li2: "アンケートの回答",
+  info_p2: "<strong>録音した音声そのものは送信されません。</strong>音声は iPhone の中だけで処理され、判定が終わったら消えます。お名前や連絡先などの個人情報も含まれません。",
+  info_p3: "アンケートの自由記述は、匿名でアプリの紹介文や記事に引用させていただく場合があります。引用を希望されない場合は、その旨をアンケートにご記入ください。",
+
+  faq_h2: "うまくいかないとき",
+  faq_sub: "当てはまるものをタップすると開きます。",
+  faq1_summary: "Apple Watch が振動しない",
+  faq1_p1: "まず、<strong>iPhone の画面がオフになっているか</strong>を確認してください。画面がついていると振動しません。",
+  faq1_p2: "それでも振動しない場合は、次の順に確認してください。",
+  faq1_list: '1. iPhone の <strong>設定 → 通知 → <span data-cfg="appName"></span></strong> で通知が許可されているか<br>2. iPhone の <strong>Watch アプリ → 通知</strong> で <span data-cfg="appName"></span> がオフになっていないか<br>3. Apple Watch が<strong>シアターモード</strong>や<strong>おやすみモード</strong>になっていないか<br>4. Apple Watch の <strong>設定 → サウンドと触覚</strong> で触覚の強さが最小になっていないか<br>5. Apple Watch のバッテリーが切れていないか',
+  faq1_p3: "それでも振動しない場合は、お手数ですがご連絡ください。",
+  faq2_summary: "朝になったら記録が途中で止まっていた",
+  faq2_p1: "そのままで構いません。どこで止まったかも、こちらにとっては重要な情報です。翌晩はいつも通り進めてください。",
+  faq2_p2: "毎晩同じように止まる場合は、ご連絡いただけると助かります。",
+  faq3_summary: "いびきをかいていないのに振動した／かいていたのに振動しなかった",
+  faq3_p: "検知の精度を確かめるのが、今回のテストの目的のひとつです。気づいた点はアンケートの自由記述にお書きください。うまくいかなかった例ほど参考になります。",
+  faq4_summary: "途中で1晩できない日があった",
+  faq4_p: "募集要項に書かれた期間内であれば、連続していなくて構いません。翌日以降に再開してください。",
+  faq5_summary: "朝、終了するのを忘れて日中もそのままだった",
+  faq5_p: '気づいた時点で <strong><span data-cfg="endLabel"></span></strong> をタップしてください。その日の記録が長くなるだけで、翌晩には影響しません。',
+  faq6_summary: "メールが送れない／添付ファイルが大きいと言われる",
+  faq6_p: "Wi-Fi に接続した状態でもう一度お試しください。それでも送れない場合は、送信せずにご連絡ください。別の方法をご案内します。",
+  faq7_summary: "アプリが見当たらない／消えてしまった",
+  faq7_p: 'TestFlight アプリを開くと、<span data-cfg="appName"></span> が一覧に残っています。そこから開き直せます。',
+  faq8_summary: "テストが終わった後、アプリはどうすればいい",
+  faq8_p: "削除していただいて構いません。TestFlight も不要であれば削除できます。記録は端末の中にしかないため、削除すると消えます。",
+
+  contact_h2: "困ったときの連絡先",
+  contact_p: "手順の途中で分からなくなったら、遠慮なくご連絡ください。すぐに対応します。",
+  footer_line1: '<span data-cfg="appName"></span> モニターテスト 手順書',
+  footer_line2: "本アプリは医療機器ではありません。睡眠時無呼吸症候群の診断や治療を目的としたものではありません。"
+},
+de: {
+  devbar_title: "Es gibt noch nicht ausgefüllte Felder (bitte vor der Weitergabe an Tester ausfüllen)",
+  hero_h1_sub: "Testanleitung",
+  hero_lede: 'Die Ersteinrichtung dauert etwa <span data-cfg="setupMinutes"></span> Minuten.<br>Danach müssen Sie nur noch jede Nacht Ihre Apple Watch tragen und schlafen.<br>Gehen Sie einfach der Reihe nach vor, dann sind Sie fertig.',
+  prep_title: "Das brauchen Sie, bevor Sie starten",
+  prep_li1: '<strong>iPhone</strong> (iOS <span data-cfg="iosMin"></span> oder höher empfohlen)',
+  prep_li2: '<strong>Apple Watch</strong> — bereits mit dem iPhone gekoppelt',
+  prep_li3: '<strong>Ladekabel für das iPhone</strong> — da das Mikrofon die ganze Nacht läuft, sollte das iPhone während des Schlafens am Kabel hängen',
+  prep_li4: '<strong>Apple-ID</strong> — im App Store angemeldet',
+
+  s1_h2: "TestFlight installieren",
+  s1_when: "Nur beim ersten Mal · 1 Min.",
+  s1_p: '<span data-cfg="appName"></span> ist noch nicht offiziell im App Store verfügbar. Deshalb installieren Sie die App über Apples offizielle App „TestFlight“. Das ist kostenlos.',
+  s1_li1: "App Store öffnen",
+  s1_li2: "Nach „TestFlight“ suchen",
+  s1_li3: "Auf <strong>Laden</strong> tippen, um zu installieren",
+  s1_fig: "Erkennbar am blauen Propeller-Symbol. Achten Sie darauf, dass als Anbieter „Apple“ angegeben ist.",
+
+  s2_h2: "TestFlight öffnen und den Nutzungsbedingungen zustimmen",
+  s2_when: "Nur beim ersten Mal · 1 Min.",
+  s2_p1: "Öffnen Sie TestFlight einmal nach der Installation. Zuerst erscheint ein Bildschirm zur Zustimmung zu den Nutzungsbedingungen.",
+  s2_p2: "Sobald <strong>„Bereit zum Testen“</strong> angezeigt wird, ist dieser Schritt abgeschlossen. Es wurde noch nichts installiert — machen Sie einfach weiter.",
+  s2_fig: "Wenn dieser Bildschirm erscheint, ist alles in Ordnung. Sie müssen nicht auf „Code einlösen“ tippen.",
+  s2_note: "<b>Wenn dieser Bildschirm nicht erscheint</b>　Möglicherweise haben Sie den Nutzungsbedingungen noch nicht zugestimmt. Öffnen Sie TestFlight erneut und folgen Sie den Anweisungen.",
+
+  s3_h2: '<span data-cfg="appName"></span> über den Einladungslink installieren',
+  s3_when: "Nur beim ersten Mal · 2 Min.",
+  s3_p1: '<strong>Öffnen Sie den folgenden Link auf dem iPhone.</strong> TestFlight öffnet sich automatisch und zeigt die Seite von <span data-cfg="appName"></span>.',
+  s3_p2: '<strong>Installieren</strong> antippen — dann wird das Symbol von <span data-cfg="appName"></span> zum Homescreen hinzugefügt.',
+  s3_warn: "<b>Am Computer geöffnet funktioniert der Link nicht.</b>　Öffnen Sie ihn unbedingt auf dem iPhone. Es hilft, ihn sich vorher per E-Mail oder Nachricht selbst zuzusenden.",
+
+  s4_h2: "Zwei Berechtigungen aktivieren",
+  s4_when: "Nur beim ersten Mal · 2 Min.",
+  s4_p1: 'Öffnen Sie <span data-cfg="appName"></span> auf dem Homescreen und tippen Sie in der Mitte auf die große Schaltfläche <strong><span data-cfg="startLabel"></span></strong>. Die „Vorbereitung fürs Schlafengehen“ beginnt, und dabei erscheinen zwei Abfragen. <strong>Wählen Sie bei beiden „Erlauben“.</strong>',
+  s4_fig1: "Mikrofonzugriff. Wird zur Schnarcherkennung benötigt.",
+  s4_fig2: "Benachrichtigungen senden. Wird benötigt, damit die Apple Watch vibriert.",
+  s4_warn: "<b>Das ist der wichtigste Punkt.</b>　Wenn Sie auch nur bei einer der beiden Abfragen „Nicht erlauben“ wählen, kann kein Schnarchen erkannt werden, und die Apple Watch vibriert nicht. Während der Testphase würde dann gar nichts aufgezeichnet.",
+  s4_p2: "Die aufgenommenen Audiodaten werden ausschließlich auf dem iPhone verarbeitet und niemals nach außen gesendet.",
+  s4_p3: 'Falls Sie versehentlich „Nicht erlauben“ gedrückt haben, können Sie Mikrofon und Benachrichtigungen unter <strong>Einstellungen → <span data-cfg="appName"></span></strong> auf dem iPhone wieder aktivieren.',
+
+  s5_h2: "Prüfen, ob die Apple Watch vibriert",
+  s5_when: "Nur beim ersten Mal · 2 Min.",
+  s5_p1: "Bevor Sie die erste Nacht starten, prüfen Sie einmal, ob Sie die Vibration am Handgelenk tatsächlich spüren. Schlafen Sie ohne diese Prüfung ein, können in dieser Nacht keine Daten erfasst werden.",
+  s5_li1: "Apple Watch ans Handgelenk anlegen",
+  s5_li2: "Auf das <strong>Apple-Watch-Symbol unten links</strong> auf dem Homescreen tippen",
+  s5_li3: "Den Anweisungen auf dem folgenden Bildschirm folgen, um eine Test-Vibration zu senden",
+  s5_fig: "Das Symbol, auf das der Pfeil zeigt. Von hier aus können Sie die Verbindung prüfen und die Vibration testen.",
+  s5_ok: "<b>Wenn Sie die Vibration spüren, sind Sie bereit.</b>　Sie können noch heute Nacht starten.",
+  s5_p2: "Falls keine Vibration spürbar ist, lesen Sie bitte den Abschnitt „Wenn etwas nicht funktioniert“ weiter unten auf dieser Seite.",
+
+  s6_h2: "Vor dem Schlafengehen",
+  s6_when: "Jede Nacht · 1 Min.",
+  s6_li1: "<strong>iPhone neben das Kopfkissen legen.</strong> Bitte das Ladekabel angeschlossen lassen",
+  s6_li2: "Apple Watch ans Handgelenk anlegen (bitte vor dem Schlafengehen vollständig aufladen)",
+  s6_li3: '<span data-cfg="appName"></span> öffnen und auf <strong><span data-cfg="startLabel"></span></strong> tippen',
+  s6_li4: "Den Anweisungen auf dem Bildschirm folgen",
+  s6_li5: "Zum Schluss <strong>die Seitentaste des iPhones drücken, um den Bildschirm auszuschalten</strong>",
+  s6_fig: "Wenn dieser Bildschirm erscheint, drücken Sie die Seitentaste, um den Bildschirm auszuschalten.",
+  s6_warn: "<b>Lassen Sie den Bildschirm nicht eingeschaltet.</b>　Solange der Bildschirm an ist, vibriert die Apple Watch nicht. Drücken Sie zum Schluss unbedingt die Seitentaste, um den Bildschirm auszuschalten, bevor Sie einschlafen.",
+  s6_note: "<b>Sie können die App schließen.</b>　Die Aufzeichnung läuft auch bei ausgeschaltetem Bildschirm weiter. Sie muss nicht geöffnet bleiben.",
+
+  s7_h2: "Am Morgen, nach dem Aufwachen",
+  s7_when: "Jeden Morgen · 10 Sek.",
+  s7_p1: 'Öffnen Sie nach dem Aufwachen <span data-cfg="appName"></span> und tippen Sie auf <strong><span data-cfg="endLabel"></span></strong>.',
+  s7_p2: "Danach wird nur eine einzige Frage angezeigt. Da Sie nur antippen müssen, ist das schnell erledigt.",
+  s7_p3: "Ihre ehrliche Antwort fließt direkt in das Ergebnis ein. Auch „Ich bin durch die Vibration aufgewacht“ ist eine wichtige Information — wählen Sie diese Option ruhig ohne Bedenken.",
+  s7_p4: "Auch wenn Sie an einem Tag vergessen haben zu antworten, können Sie den Test fortsetzen. Setzen Sie einfach ab dem Tag fort, an dem Sie es bemerken.",
+
+  s8_h2: "Nach der letzten Nacht: Antworten senden",
+  s8_when: "Einmal am Ende · 5 Min.",
+  s8_p: "Wenn die in der Ausschreibung festgelegte Anzahl an Nächten abgeschlossen ist, beantworten Sie bitte die Umfrage und senden Sie sie ab. Damit sind Sie fertig.",
+  s8_li1: "Auf das <strong>Zahnrad-Symbol unten rechts</strong> auf dem Homescreen tippen",
+  s8_li2: 'Zu <strong><span data-cfg="surveyLabel"></span></strong> gehen',
+  s8_li3: "Die Umfrage beantworten",
+  s8_li4: "Nach dem Beantworten öffnet sich die Mail-App. Empfänger und Anhang sind bereits ausgefüllt — <strong>tippen Sie nur oben rechts auf Senden</strong>",
+  s8_fig1: "Der Pfeil zeigt auf das Einstellungssymbol.",
+  s8_fig2: "Sobald dieser Bildschirm erscheint, senden Sie die Mail über den blauen Pfeil oben rechts.",
+  s8_done_h3: "Vielen Dank für Ihre Mühe",
+  s8_done_p: "Damit ist alles erledigt. Vielen Dank für Ihre Unterstützung.",
+
+  info_h2: "Über die gesendeten Daten",
+  info_when: "Bitte lesen",
+  info_p1: "Es werden ausschließlich die folgenden zwei Dinge gesendet:",
+  info_li1: "Die Schnarcherkennungs-Aufzeichnungen (Zeitangaben und Messwerte)",
+  info_li2: "Ihre Antworten aus der Umfrage",
+  info_p2: "<strong>Die eigentliche Tonaufnahme wird nicht gesendet.</strong> Audio wird ausschließlich auf dem iPhone verarbeitet und nach der Auswertung gelöscht. Persönliche Daten wie Name oder Kontaktinformationen sind nicht enthalten.",
+  info_p3: "Freitextantworten aus der Umfrage können anonymisiert in Beschreibungstexten oder Artikeln über die App zitiert werden. Falls Sie eine Zitierung nicht wünschen, vermerken Sie dies bitte in der Umfrage.",
+
+  faq_h2: "Wenn etwas nicht funktioniert",
+  faq_sub: "Tippen Sie auf den passenden Punkt, um ihn zu öffnen.",
+  faq1_summary: "Die Apple Watch vibriert nicht",
+  faq1_p1: "Prüfen Sie zunächst, ob <strong>der Bildschirm des iPhones ausgeschaltet</strong> ist. Bei eingeschaltetem Bildschirm vibriert die Watch nicht.",
+  faq1_p2: "Falls es dann immer noch nicht vibriert, prüfen Sie bitte der Reihe nach:",
+  faq1_list: '1. iPhone: <strong>Einstellungen → Mitteilungen → <span data-cfg="appName"></span></strong> — sind Benachrichtigungen erlaubt?<br>2. iPhone: <strong>Watch-App → Mitteilungen</strong> — ist <span data-cfg="appName"></span> dort nicht deaktiviert?<br>3. Ist der <strong>Theatermodus</strong> oder der <strong>Nicht-stören-Modus</strong> auf der Apple Watch aktiv?<br>4. Apple Watch: <strong>Einstellungen → Töne & Haptik</strong> — ist die Stärke der Haptik nicht auf Minimum gestellt?<br>5. Ist der Akku der Apple Watch nicht leer?',
+  faq1_p3: "Falls es weiterhin nicht funktioniert, kontaktieren Sie uns bitte.",
+  faq2_summary: "Am Morgen war die Aufzeichnung vorzeitig gestoppt",
+  faq2_p1: "Das ist kein Problem. Auch wo die Aufzeichnung gestoppt ist, ist für uns eine wichtige Information. Machen Sie in der nächsten Nacht wie gewohnt weiter.",
+  faq2_p2: "Falls dies jede Nacht auf die gleiche Weise passiert, wären wir für eine Nachricht dankbar.",
+  faq3_summary: "Vibration ohne Schnarchen / Schnarchen ohne Vibration",
+  faq3_p: "Die Überprüfung der Erkennungsgenauigkeit ist eines der Ziele dieses Tests. Bitte notieren Sie Ihre Beobachtungen im Freitextfeld der Umfrage. Gerade Beispiele, die nicht gut funktioniert haben, sind besonders hilfreich.",
+  faq4_summary: "Eine Nacht konnte nicht getestet werden",
+  faq4_p: "Solange es innerhalb des in der Ausschreibung genannten Zeitraums bleibt, müssen die Nächte nicht aufeinanderfolgen. Setzen Sie den Test einfach an einem der folgenden Tage fort.",
+  faq5_summary: "Morgens vergessen zu beenden, es lief tagsüber weiter",
+  faq5_p: 'Tippen Sie auf <strong><span data-cfg="endLabel"></span></strong>, sobald Sie es bemerken. Die Aufzeichnung dieses Tages wird dadurch nur länger, die nächste Nacht ist davon nicht betroffen.',
+  faq6_summary: "Mail kann nicht gesendet werden / Anhang zu groß",
+  faq6_p: "Bitte versuchen Sie es erneut mit einer WLAN-Verbindung. Falls es weiterhin nicht funktioniert, senden Sie die Mail nicht ab und kontaktieren Sie uns stattdessen — wir zeigen Ihnen einen anderen Weg.",
+  faq7_summary: "Die App ist nicht auffindbar / wurde gelöscht",
+  faq7_p: 'Öffnen Sie die TestFlight-App — <span data-cfg="appName"></span> ist dort weiterhin in der Liste. Von dort können Sie sie erneut öffnen.',
+  faq8_summary: "Was tun mit der App nach dem Testende?",
+  faq8_p: "Sie können sie löschen. Falls Sie TestFlight auch nicht mehr benötigen, können Sie es ebenfalls löschen. Da die Aufzeichnungen ausschließlich auf dem Gerät gespeichert sind, werden sie beim Löschen entfernt.",
+
+  contact_h2: "Kontakt bei Problemen",
+  contact_p: "Wenn Sie bei den Schritten nicht mehr weiterwissen, kontaktieren Sie uns bitte ohne Zögern. Wir kümmern uns umgehend darum.",
+  footer_line1: '<span data-cfg="appName"></span> Testanleitung für Monitor-Tester',
+  footer_line2: "Diese App ist kein Medizinprodukt. Sie dient nicht der Diagnose oder Behandlung von Schlafapnoe."
+}
+};
+
+function applyConfig(){
+  var lang = document.documentElement.lang === 'de' ? 'de' : 'ja';
   var missing = [];
   document.querySelectorAll('[data-cfg]').forEach(function(el){
     var k = el.getAttribute('data-cfg');
     var v = CONFIG[k];
     if (v === undefined || v === null || String(v).trim() === '') {
-      el.textContent = '要記入';
+      el.textContent = lang === 'de' ? 'auszufüllen' : '要記入';
       el.className = (el.className ? el.className + ' ' : '') + 'chip';
-      if (LABELS[k] && missing.indexOf(LABELS[k]) === -1) missing.push(LABELS[k]);
+      var labels = LABELS[lang] || LABELS.ja;
+      if (labels[k] && missing.indexOf(labels[k]) === -1) missing.push(labels[k]);
     } else {
       el.textContent = v;
+      el.className = (el.className || '').replace(/\bchip\b/, '').trim();
     }
   });
 
@@ -532,7 +800,36 @@ const LABELS = {
   if (missing.length) {
     document.getElementById('devbar').style.display = 'block';
     document.getElementById('devlist').textContent = missing.join(' ／ ');
+  } else {
+    document.getElementById('devbar').style.display = 'none';
   }
+}
+
+function applyLanguage(lang){
+  if (lang !== 'ja' && lang !== 'de') lang = 'ja';
+  document.documentElement.lang = lang;
+  var dict = I18N[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('.langswitch button').forEach(function(b){
+    var isActive = b.getAttribute('data-lang') === lang;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+  try { localStorage.setItem('stopgugu_guide_lang', lang); } catch (e) {}
+  applyConfig();
+}
+
+(function(){
+  document.querySelectorAll('.langswitch button').forEach(function(b){
+    b.addEventListener('click', function(){ applyLanguage(b.getAttribute('data-lang')); });
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem('stopgugu_guide_lang'); } catch (e) {}
+  applyLanguage(saved === 'de' ? 'de' : 'ja');
 })();
 </script>
 
