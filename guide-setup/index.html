@@ -308,9 +308,29 @@ const LABELS = {
     </div>
   </section>
 
-  <!-- 4 -->
-  <section class="step">
+  <!-- 4: Japanese subscription instructions -->
+  <section class="step" data-only-lang="ja">
     <div class="badge">4</div>
+    <h2 data-i18n="sub_h2">「7日間無料で試す」からサブスク登録する</h2>
+    <span class="when" data-i18n="sub_when">初回のみ・2分</span>
+    <p data-i18n="sub_p"><span data-cfg="appName"></span> を開き、最初の案内に沿って進んでください。「今夜は、どうはじめますか？」の画面が表示されたら、次の手順で登録します。</p>
+    <ol>
+      <li data-i18n="sub_li1">画面下側の「今夜から、合図を使う」にある <strong>「7日間無料で試す」</strong> をタップする</li>
+      <li data-i18n="sub_li2">次に表示されるサブスクリプションの案内画面（ペイウォール）から、<strong>サブスク登録へ進む</strong></li>
+      <li data-i18n="sub_li3">画面の案内に従って<strong>登録を完了する</strong>。完了したら、次の「2つの許可をオンにする」へ進む</li>
+    </ol>
+    <figure>
+      <img src="images/04-trial-selection.png" width="714" height="1378" alt="STOPGÜGU の開始方法の選択画面。下側に「7日間無料で試す」ボタン" loading="lazy">
+      <figcaption data-i18n="sub_fig">下側の「7日間無料で試す」を選んでください。Apple Watch の振動を使うテストに必要な手順です。</figcaption>
+    </figure>
+    <div class="note">
+      <p data-i18n="sub_note"><b>今回のテストでは料金は発生しません。</b>　招待リンクから入れた TestFlight 版でのサブスク登録はテスト用です。料金が表示されても、実際に請求されることはありません。</p>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="step">
+    <div class="badge">5</div>
     <h2 data-i18n="s4_h2">2つの許可をオンにする</h2>
     <span class="when" data-i18n="s4_when">初回のみ・2分</span>
 
@@ -335,9 +355,9 @@ const LABELS = {
     <p data-i18n="s4_p3">誤って「許可しない」を押してしまった場合は、iPhone の <strong>設定 → <span data-cfg="appName"></span></strong> から、マイクと通知をオンに戻せます。</p>
   </section>
 
-  <!-- 5 -->
+  <!-- 6 -->
   <section class="step">
-    <div class="badge">5</div>
+    <div class="badge">6</div>
     <h2 data-i18n="s5_h2">Apple Watch が振動するか確かめる</h2>
     <span class="when" data-i18n="s5_when">初回のみ・2分</span>
 
@@ -430,6 +450,15 @@ ja: {
   s3_p1: '下のリンクを <strong>iPhone で</strong> 開いてください。TestFlight が自動で開き、<span data-cfg="appName"></span> のページが表示されます。',
   s3_p2: '<strong>インストール</strong> をタップすると、ホーム画面に <span data-cfg="appName"></span> のアイコンが追加されます。',
   s3_warn: "<b>パソコンで開いても進めません。</b>　リンクは必ず iPhone で開いてください。メールや LINE で自分宛てに送っておくと開きやすいです。",
+
+  sub_h2: "「7日間無料で試す」からサブスク登録する",
+  sub_when: "初回のみ・2分",
+  sub_p: "<span data-cfg=\"appName\"></span> を開き、最初の案内に沿って進んでください。「今夜は、どうはじめますか？」の画面が表示されたら、次の手順で登録します。",
+  sub_li1: "画面下側の「今夜から、合図を使う」にある <strong>「7日間無料で試す」</strong> をタップする",
+  sub_li2: "次に表示されるサブスクリプションの案内画面（ペイウォール）から、<strong>サブスク登録へ進む</strong>",
+  sub_li3: "画面の案内に従って<strong>登録を完了する</strong>。完了したら、次の「2つの許可をオンにする」へ進む",
+  sub_fig: "下側の「7日間無料で試す」を選んでください。Apple Watch の振動を使うテストに必要な手順です。",
+  sub_note: "<b>今回のテストでは料金は発生しません。</b>　招待リンクから入れた TestFlight 版でのサブスク登録はテスト用です。料金が表示されても、実際に請求されることはありません。",
 
   s4_h2: "2つの許可をオンにする",
   s4_when: "初回のみ・2分",
@@ -676,6 +705,14 @@ function applyConfig(){
 function applyLanguage(lang){
   if (lang !== 'ja' && lang !== 'de') lang = 'ja';
   document.documentElement.lang = lang;
+  document.querySelectorAll('[data-only-lang]').forEach(function(el){
+    el.hidden = el.getAttribute('data-only-lang') !== lang;
+  });
+  var stepNumber = 0;
+  document.querySelectorAll('.step').forEach(function(el){
+    var badge = el.querySelector('.badge:not(.info)');
+    if (badge && !el.hidden) badge.textContent = ++stepNumber;
+  });
   var dict = I18N[lang];
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var key = el.getAttribute('data-i18n');
