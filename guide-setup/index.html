@@ -30,17 +30,18 @@ const CONFIG = {
   surveyLabel:    "モニター回答を送る",
 
   /* --- 連絡先 --- */
-  contactMethod:  "info@mrlongman.com"
+  instagramUrl:   "https://www.instagram.com/stopgugu.jp/",
+  threadsUrl:     "https://www.threads.com/@stopgugu.jp"
 };
 
 const LABELS = {
   ja: {
     inviteUrl:"招待リンク", startLabel:"開始ボタン名", endLabel:"終了ボタン名",
-    surveyLabel:"アンケートの項目名", contactMethod:"連絡方法"
+    surveyLabel:"アンケートの項目名", instagramUrl:"Instagram のURL", threadsUrl:"Threads のURL"
   },
   de: {
     inviteUrl:"Einladungslink", startLabel:"Name der Start-Schaltfläche", endLabel:"Name der Beenden-Schaltfläche",
-    surveyLabel:"Name des Umfrage-Menüpunkts", contactMethod:"Kontaktmethode"
+    surveyLabel:"Name des Umfrage-Menüpunkts", instagramUrl:"Instagram-URL", threadsUrl:"Threads-URL"
   }
 };
 </script>
@@ -202,6 +203,8 @@ const LABELS = {
         border-radius:10px; padding:11px 16px; font-family:var(--mono); font-size:15px;
         color:var(--grape-deep); text-decoration:none; word-break:break-all}
   .contact .mail:hover{background:#E3DAFC}
+  .contact .sns{display:flex; flex-wrap:wrap; gap:10px}
+  .contact .handle{opacity:.75; margin-left:4px}
   footer{padding:34px 0 90px; font-size:12.5px; color:var(--ink-3); line-height:1.9}
 
   @media (prefers-reduced-motion:reduce){
@@ -407,8 +410,11 @@ const LABELS = {
 
 <div class="contact">
   <h2 data-i18n="contact_h2">困ったときの連絡先</h2>
-  <p data-i18n="contact_p">手順の途中で分からなくなったら、遠慮なくご連絡ください。すぐに対応します。</p>
-  <p><a class="mail" data-cfg-href-mail="contactMethod" href="#"><span data-cfg="contactMethod"></span></a></p>
+  <p data-i18n="contact_p">手順の途中で分からなくなったら、Instagram または Threads のアカウントに DM でご連絡ください。すぐに対応します。</p>
+  <p class="sns">
+    <a class="mail" data-cfg-href="instagramUrl" href="#" target="_blank" rel="noopener">Instagram <span class="handle">stopgugu.jp</span></a>
+    <a class="mail" data-cfg-href="threadsUrl" href="#" target="_blank" rel="noopener">Threads <span class="handle">@stopgugu.jp</span></a>
+  </p>
 </div>
 
 <footer>
@@ -542,7 +548,7 @@ ja: {
   faq8_p: "削除していただいて構いません。TestFlight も不要であれば削除できます。記録は端末の中にしかないため、削除すると消えます。",
 
   contact_h2: "困ったときの連絡先",
-  contact_p: "手順の途中で分からなくなったら、遠慮なくご連絡ください。すぐに対応します。",
+  contact_p: "手順の途中で分からなくなったら、Instagram または Threads のアカウントに DM でご連絡ください。すぐに対応します。",
   footer_line1: '<span data-cfg="appName"></span> モニターテスト 手順書',
   footer_line2: "本アプリは医療機器ではありません。睡眠時無呼吸症候群の診断や治療を目的としたものではありません。"
 },
@@ -659,7 +665,7 @@ de: {
   faq8_p: "Sie können sie löschen. Falls Sie TestFlight auch nicht mehr benötigen, können Sie es ebenfalls löschen. Da die Aufzeichnungen ausschließlich auf dem Gerät gespeichert sind, werden sie beim Löschen entfernt.",
 
   contact_h2: "Kontakt bei Problemen",
-  contact_p: "Wenn Sie bei den Schritten nicht mehr weiterwissen, kontaktieren Sie uns bitte ohne Zögern. Wir kümmern uns umgehend darum.",
+  contact_p: "Wenn Sie bei den Schritten nicht mehr weiterwissen, schreiben Sie uns bitte eine Direktnachricht auf Instagram oder Threads. Wir kümmern uns umgehend darum.",
   footer_line1: '<span data-cfg="appName"></span> Testanleitung für Monitor-Tester',
   footer_line2: "Diese App ist kein Medizinprodukt. Sie dient nicht der Diagnose oder Behandlung von Schlafapnoe."
 }
